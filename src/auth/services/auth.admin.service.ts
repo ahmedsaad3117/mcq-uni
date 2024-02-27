@@ -83,7 +83,7 @@ export class AdminAuthService {
       await this.usersService.create(createUserDto);
 
       // return { message: `Otp sent to your ${otp_destination}`, otp };
-      const message = translateThis('auth.user_createden');
+      const message = translateThis('auth.user_created');
       return {
         message,
       };
