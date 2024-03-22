@@ -7,17 +7,11 @@ import {
 } from 'class-validator';
 
 export class CreateMaterialDto {
-  @IsString()
   @IsOptional()
-  author: string;
+  userId: number;
 
-  @IsString()
   @IsOptional()
-  authorID: string;
-
-  @IsString()
-  @IsOptional()
-  category: string;
+  mainCategoryId: number;
 
   @IsString()
   @IsOptional()

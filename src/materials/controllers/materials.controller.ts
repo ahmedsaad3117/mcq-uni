@@ -12,6 +12,7 @@ import { MaterialsService } from '../providers/materials.base.service';
 import { CreateMaterialDto } from '../dto/create-material.dto';
 import { UpdateMaterialDto } from '../dto/update-material.dto';
 import { PageOptionsDto } from '@app/_common/pagination/pageOption.dto';
+import { FilterMaterialDto } from '../dto/filter-material.dto';
 
 @Controller('materials')
 export class MaterialsController {
@@ -23,8 +24,11 @@ export class MaterialsController {
   }
 
   @Get()
-  findAll(@Query() pageOptionsDto: PageOptionsDto) {
-    return this.materialsService.findAll(pageOptionsDto);
+  findAll(
+    @Query() pageOptionsDto: PageOptionsDto,
+    @Query() materialsFilter: FilterMaterialDto,
+  ) {
+    return this.materialsService.findAll(pageOptionsDto, materialsFilter);
   }
 
   @Get(':id')

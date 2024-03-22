@@ -4,7 +4,7 @@ import {
   NotFoundException,
   Type,
   UnprocessableEntityException,
-} from "@nestjs/common";
+} from '@nestjs/common';
 import {
   DeepPartial,
   DeleteOneModel,
@@ -15,7 +15,7 @@ import {
   FindOptionsWhere,
   QueryRunner,
   Repository,
-} from "typeorm";
+} from 'typeorm';
 import {
   cantSaveErrorAutoTranslatedString,
   createSuccessAutoTranslated,
@@ -27,10 +27,11 @@ import {
   notFoundErrorAutoTranslatedString,
   updateErrorAutoTranslatedString,
   updateSuccessAutoTranslated,
-} from "../utils/successResponseMessage.util";
-import { PageOptionsDto } from "../pagination/pageOption.dto";
-import { PageMetaDto } from "../pagination/page-meta.dto";
-import { PageDto, PageDtoAutoTranslated } from "../pagination/page.dto";
+} from '../utils/successResponseMessage.util';
+import { PageOptionsDto } from '../pagination/pageOption.dto';
+import { PageMetaDto } from '../pagination/page-meta.dto';
+import { PageDto, PageDtoAutoTranslated } from '../pagination/page.dto';
+import { log } from 'console';
 
 export abstract class BaseService<T> {
   protected readonly logger: Logger;
@@ -43,15 +44,15 @@ export abstract class BaseService<T> {
   async createAndSaveEntity(entity: Partial<T>): Promise<{ message: string }> {
     try {
       const createdEntity = this.createEntity(entity);
-      console.log(createdEntity);
 
       const savedEntity: T = await this.baseRepository.save(createdEntity);
       //  return savedEntity;
       return createSuccessAutoTranslated();
     } catch (error) {
+      log(error);
       this.logger.warn(`Can't save entity =>  ${error.message}`);
       throw new UnprocessableEntityException(
-        cantSaveErrorAutoTranslatedString()
+        cantSaveErrorAutoTranslatedString(),
       );
     }
   }
@@ -67,7 +68,7 @@ export abstract class BaseService<T> {
     } catch (error) {
       this.logger.warn(`Can't save entity =>  ${error.message}`);
       throw new UnprocessableEntityException(
-        cantSaveErrorAutoTranslatedString()
+        cantSaveErrorAutoTranslatedString(),
       );
     }
   }
@@ -83,7 +84,7 @@ export abstract class BaseService<T> {
     } catch (error) {
       this.logger.warn(`Can't save entity =>  ${error.message}`);
       throw new UnprocessableEntityException(
-        cantSaveErrorAutoTranslatedString()
+        cantSaveErrorAutoTranslatedString(),
       );
     }
   }
@@ -91,13 +92,18 @@ export abstract class BaseService<T> {
   //-------------------------------------------------- FindAll ------------------------------------------------------------------------
   async findAllEntities(
     pageOptionsDto: PageOptionsDto,
-    findManyOptions: FindManyOptions = {}
+    findManyOptions: FindManyOptions = {},
   ) {
+    if (Object.entries(findManyOptions).length) {
+      for (const [key, value] of Object.entries(findManyOptions)) {
+        findManyOptions.where = { [key]: value };
+      }
+    }
     findManyOptions.loadEagerRelations = false;
     findManyOptions.take = pageOptionsDto.take;
     findManyOptions.skip = (pageOptionsDto.page - 1) * pageOptionsDto.take;
     const [entities, total] = await this.baseRepository.findAndCount(
-      findManyOptions
+      findManyOptions,
     );
     const pageMetaDto = new PageMetaDto({
       itemsPerPage: entities.length,
@@ -112,10 +118,10 @@ export abstract class BaseService<T> {
     return entities;
   }
   async findAllEntitiesWithoutPaginationForController(
-    findManyOptions: FindManyOptions
+    findManyOptions: FindManyOptions,
   ) {
     const entities = await this.findAllEntitiesWithoutPagination(
-      findManyOptions
+      findManyOptions,
     );
     return findAllSuccessAutoTranslated(entities);
   }
@@ -125,9 +131,9 @@ export abstract class BaseService<T> {
       const entity = await this.baseRepository.findOne(findOneOptions);
       return entity;
     } catch (error) {
-      this.logger.warn("Entity not found with query:", findOneOptions.where);
+      this.logger.warn('Entity not found with query:', findOneOptions.where);
       throw new UnprocessableEntityException(
-        defaultErrorAutoTranslatedString()
+        defaultErrorAutoTranslatedString(),
       );
     }
   }
@@ -139,15 +145,15 @@ export abstract class BaseService<T> {
     return entity;
   }
   async findOneEntityById(id: number, findOneOptions: FindOneOptions) {
-    findOneOptions["where"] = { id };
+    findOneOptions['where'] = { id };
     const entity = await this.findOneEntity(findOneOptions);
     return entity;
   }
   async findOneEntityByIdOrFail(
     id: number,
-    findOneOptions: FindOneOptions = {}
+    findOneOptions: FindOneOptions = {},
   ) {
-    findOneOptions["where"] = { id };
+    findOneOptions['where'] = { id };
     const entity = await this.findOneEntityOrFail(findOneOptions);
     return entity;
   }
@@ -164,7 +170,7 @@ export abstract class BaseService<T> {
 
       return updateSuccessAutoTranslated();
     } catch (error) {
-      this.logger.warn("Cant update entity", error.message);
+      this.logger.warn('Cant update entity', error.message);
       throw new UnprocessableEntityException(updateErrorAutoTranslatedString());
     }
   }
@@ -186,7 +192,7 @@ export abstract class BaseService<T> {
       await this.baseRepository.softRemove(entity);
       return deleteSuccessAutoTranslated();
     } catch (error) {
-      this.logger.warn("Cant delete entity", error.message);
+      this.logger.warn('Cant delete entity', error.message);
       throw new UnprocessableEntityException(deleteErrorAutoTranslated());
     }
   }
@@ -195,7 +201,7 @@ export abstract class BaseService<T> {
       await this.baseRepository.remove(entity);
       return deleteSuccessAutoTranslated();
     } catch (error) {
-      this.logger.warn("Cant delete entity", error.message);
+      this.logger.warn('Cant delete entity', error.message);
       throw new UnprocessableEntityException(deleteErrorAutoTranslated());
     }
   }
@@ -207,7 +213,7 @@ export abstract class BaseService<T> {
   async findLastEntities(
     take: number = 5,
     order: FindOptionsOrder<T>,
-    relations?: FindOptionsRelations<T>
+    relations?: FindOptionsRelations<T>,
   ) {
     const last = await this.baseRepository.find({
       order,
@@ -218,10 +224,10 @@ export abstract class BaseService<T> {
   }
   async findLastInsertedEntities(
     take: number,
-    relations?: FindOptionsRelations<T>
+    relations?: FindOptionsRelations<T>,
   ) {
     let order = {};
-    order["created_at"] = "DESC";
+    order['created_at'] = 'DESC';
     return this.findLastEntities(take, order, relations);
   }
 }

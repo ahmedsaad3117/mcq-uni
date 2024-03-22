@@ -9,7 +9,6 @@ import {
   ClassSerializerInterceptor,
 } from '@nestjs/common';
 import { CreateUserDto } from '../../user/dto/create-user.dto';
-import { AdminAuthService } from '../services/auth.admin.service';
 import { LoginDto } from '../dto/login.dto';
 import { VerifyOtpDto } from '../dto/verify-otp.dto';
 import { Public } from 'src/_common/decorators/public.decorator';
@@ -19,6 +18,7 @@ import { LoginOrSignupDto } from '../dto/login-or-signup.dto';
 import { SignupDto } from '../dto/signup.dto';
 import { SignupAdminDto } from '../dto/signup.admin.dto';
 import { log } from 'console';
+import { AdminAuthService } from '../providers/auth.admin.service';
 
 @UseInterceptors(ClassSerializerInterceptor)
 @Controller('user')

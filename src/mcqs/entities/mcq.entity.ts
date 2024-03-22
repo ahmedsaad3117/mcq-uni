@@ -1,5 +1,14 @@
 import { BaseEntity } from '@app/_common/entities/base-entity';
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { CustomCategory } from '@app/custom-category/entities/custom-category.entity';
+import { Material } from '@app/materials/entities/material.entity';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 @Entity()
 export class Mcq extends BaseEntity {
@@ -26,4 +35,13 @@ export class Mcq extends BaseEntity {
 
   @Column({ type: 'varchar', default: null })
   studentExplanation: string;
+
+  @ManyToOne(() => CustomCategory, (customCategory) => customCategory.mcqs, {
+    nullable: false,
+  })
+  @JoinColumn({ name: 'materialId' })
+  customCategory: CustomCategory;
+
+  @Column()
+  materialId: number;
 }

@@ -10,6 +10,7 @@ import { Material } from 'src/materials/entities/material.entity';
 import { IsEmail, IsNotEmpty, IsString, MinLength } from 'class-validator';
 import { BaseEntity } from 'src/_common/entities/base-entity';
 import Config from 'src/_common/config/config';
+import { MainCategory } from '@app/main-category/entities/main-category.entity';
 
 @Entity('users')
 export class UserEntity extends BaseEntity {
@@ -32,8 +33,12 @@ export class UserEntity extends BaseEntity {
   password: string;
 
   //--------------------------- relations
-  // @OneToMany(() => Material, (material) => material.user)
-  // materials: Material[];
+  @OneToMany(() => Material, (material) => material.user)
+  materials: Material[];
+
+  // @OneToMany(() => CustomCategory, (category) => category.user)
+  // categorys: CustomCategory[];
+
   //----------------------------- methods
 
   async isCorrectPassword(password: string) {

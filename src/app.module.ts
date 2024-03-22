@@ -18,6 +18,8 @@ import path from 'path';
 import { RequestLangMiddleware } from './_common/middlewares/lang.middleware';
 import { AuthMiddleware } from './_common/middlewares/auth.midleware';
 import { McqsModule } from './mcqs/mcqs.module';
+import { CustomCategoryModule } from './custom-category/custom-category.module';
+import { MainCategoryModule } from './main-category/main-category.module';
 
 @Module({
   imports: [
@@ -37,6 +39,8 @@ import { McqsModule } from './mcqs/mcqs.module';
     MaterialsModule,
     AuthModule,
     McqsModule,
+    CustomCategoryModule,
+    MainCategoryModule,
   ],
   controllers: [AppController],
   providers: [
