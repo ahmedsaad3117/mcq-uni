@@ -23,11 +23,10 @@ export class CustomCategoryService extends BaseService<CustomCategory> {
 
   async findAll(pageOptionsDto: PageOptionsDto) {
     const entities = await this.categoryRepository.find({
-      relations: ['material', 'mainCategory'],
+      relations: ['childCustomCategorys', 'mcqs'],
     });
 
     return entities;
-    // return this.findAllEntities(pageOptionsDto);
   }
 
   findOne(id: number) {

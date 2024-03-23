@@ -6,4 +6,7 @@ export class CreateCustomCategoryDto {
 
   @IsNumber()
   materialId: number;
+
+  @IsNumber()
+  parentCustomCategoryId: number;
 }

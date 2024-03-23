@@ -22,7 +22,7 @@ export class MainCategoryService extends BaseService<MainCategory> {
 
   async findAll(pageOptionsDto: PageOptionsDto) {
     const entities = await this.mainCategoryRepository.find({
-      relations: ['material', 'mainCategory'],
+      relations: ['material', 'childMainCategorys'],
     });
 
     return entities;

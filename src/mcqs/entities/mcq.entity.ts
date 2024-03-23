@@ -39,9 +39,9 @@ export class Mcq extends BaseEntity {
   @ManyToOne(() => CustomCategory, (customCategory) => customCategory.mcqs, {
     nullable: false,
   })
-  @JoinColumn({ name: 'materialId' })
+  @JoinColumn({ name: 'customCategoryId' })
   customCategory: CustomCategory;
 
-  @Column()
-  materialId: number;
+  @Column({ nullable: true })
+  customCategoryId: number;
 }

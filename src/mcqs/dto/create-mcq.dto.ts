@@ -5,6 +5,7 @@ import {
   IsNotEmpty,
   IsOptional,
   IsArray,
+  IsNumber,
 } from 'class-validator';
 
 export class CreateMcqDto {
@@ -35,4 +36,8 @@ export class CreateMcqDto {
   @IsString()
   @IsOptional()
   studentExplanation: string;
+
+  @IsOptional()
+  @IsNumber()
+  customCategoryId: number;
 }

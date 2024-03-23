@@ -29,10 +29,7 @@ export class MainCategory {
   @Column({ nullable: true })
   parentMainCategoryId: number;
 
-  @OneToMany(
-    () => MainCategory,
-    (mainCategory) => mainCategory.parentMainCategoryId,
-  )
+  @OneToMany(() => MainCategory, (mainCategory) => mainCategory.mainCategory)
   childMainCategorys: MainCategory[];
 
   @OneToMany(() => Material, (material) => material.mainCategory, {

@@ -1,7 +1,9 @@
 import { Material } from '@app/materials/entities/material.entity';
 import { Mcq } from '@app/mcqs/entities/mcq.entity';
 import { UserEntity } from '@app/user/entities/users.entity';
+import { Expose } from 'class-transformer';
 import {
+  AfterLoad,
   Column,
   Entity,
   JoinColumn,
@@ -63,8 +65,24 @@ export class CustomCategory {
   // @OneToMany(() => CustomCategory, (customCategory) => customCategory.material)
   // customCategorys: CustomCategory[];
 
-  @OneToMany(() => Mcq, (mcq) => mcq.customCategory)
+  // TODO: get all mcq for each child
+  // اذا كان في كاستم كتيروجوي عنده اسئله وعايز اضيف كاستم كتتجويري تاني تحته
+  @OneToMany(() => Mcq, (mcq) => mcq.customCategory, { eager: true })
   mcqs?: Mcq[];
+
+  @Expose()
+  parentMcqs: Mcq[];
+
+  @AfterLoad()
+  getParentMcqs() {
+    if (this.childCustomCategorys)
+      this.parentMcqs = this.childCustomCategorys
+        .map((childCustom) => {
+          console.log(childCustom);
+          if (childCustom.mcqs) return childCustom.mcqs.map((mcq) => mcq);
+        })
+        .flat();
+  }
 
   // @OneToMany(
   //   () => CustomCategory,
