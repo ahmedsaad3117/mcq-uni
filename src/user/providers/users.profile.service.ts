@@ -15,7 +15,11 @@ export class UsersProfileService {
     private userRepository: Repository<UserEntity>,
   ) {}
   async findProfile(id: number) {
-    const user = await this.userBaseService.findOne(id);
+    const user = await this.userRepository.findOne({
+      where: { id },
+      relations: { materials: true },
+    });
+
     return findOneSuccessAutoTranslated(user);
   }
 

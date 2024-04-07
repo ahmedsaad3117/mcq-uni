@@ -29,6 +29,9 @@ export class Material {
   @Column({ type: 'varchar', default: null })
   intro: string;
 
+  @Column({ type: 'varchar', default: null })
+  image: string;
+
   @Column({ type: 'boolean', default: null })
   isPublic: boolean;
 
