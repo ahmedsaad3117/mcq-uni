@@ -32,6 +32,9 @@ export class UserEntity extends BaseEntity {
   @Column({ type: 'varchar', default: null })
   password: string;
 
+  @Column({ type: 'varchar', default: null })
+  image: string;
+
   //--------------------------- relations
   @OneToMany(() => Material, (material) => material.user)
   materials: Material[];

@@ -20,6 +20,7 @@ import { AuthMiddleware } from './_common/middlewares/auth.midleware';
 import { McqsModule } from './mcqs/mcqs.module';
 import { CustomCategoryModule } from './custom-category/custom-category.module';
 import { MainCategoryModule } from './main-category/main-category.module';
+import { UploadModule } from './upload/upload.module';
 
 @Module({
   imports: [
@@ -41,6 +42,7 @@ import { MainCategoryModule } from './main-category/main-category.module';
     McqsModule,
     CustomCategoryModule,
     MainCategoryModule,
+    UploadModule,
   ],
   controllers: [AppController],
   providers: [
